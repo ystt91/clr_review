@@ -6,7 +6,6 @@ function IndexPage(props) {
 
     const navigate = useNavigate();
 
-
     return (
         <BasicLayout>
             <div className="text-black font-extrabold -mt-10"> Products Menus </div>

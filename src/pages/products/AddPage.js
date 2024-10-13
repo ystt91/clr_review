@@ -1,16 +1,17 @@
 import React from 'react';
-import ListComponent from "../../components/products/ListComponent";
+import AddComponent from "../../components/products/AddComponent";
 
-function ListPage(props) {
+function AddPage(props) {
     return (
         <div className="w-full p-4 bg-white">
             <div className="text-3xl m-4 font-extrabold">
-                Products List Page
+                Products Add Page
             </div>
 
-            <ListComponent/>
+            <AddComponent/>
+
         </div>
     );
 }
 
-export default ListPage;
+export default AddPage;

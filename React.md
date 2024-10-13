@@ -17,3 +17,16 @@
 
 # Modal
 # 기존의 SSR의 POST , REDIRECT, GET (RPG) 패턴에서 벗어난 방법으로 모달을 쓴다.
+
+
+    const deleteOldImages = (imageName) => {
+        
+        const resultFileNames = product.uploadFileNames.filter(fileName => fileName !== imageName)
+
+        product.uploadFileNames = resultFileNames
+
+        setProduct({...product})
+
+    }
+
+# React의 큰 특징 : 데이터가 변경되면 렌더링 된다는 것을 주의하세요
