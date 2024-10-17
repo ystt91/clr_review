@@ -5,9 +5,8 @@ import {useSelector} from "react-redux";
 
 function BasicMenu(props) {
 
-    const loginState= useSelector(state => state.loginSlice)
+    const loginState = useSelector(state => state.loginSlice)
 
-    console.log("loginState = " + loginState)
 
     return (
         <nav id='navbar' className=" flex bg-blue-300">
@@ -29,9 +28,17 @@ function BasicMenu(props) {
             </div>
 
             <div className="w-1/5 flex justify-end bg-orange-300 p-4 font-medium">
-                <div className="text-white text-sm m-1 rounded">
-                    <Link to={'/member/login'}>Login</Link>
-                </div>
+                {
+                    !loginState.email
+                    ?
+                        <div className="text-white text-sm m-1 rounded">
+                            <Link to={'/member/login'}>Login</Link>
+                        </div>
+                    :
+                        <div className="text-white text-sm m-1 rounded">
+                            <Link to={'/member/logout'}>Logout</Link>
+                        </div>
+                }
             </div>
         </nav>
 
