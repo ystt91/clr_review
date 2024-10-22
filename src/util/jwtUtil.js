@@ -50,7 +50,7 @@ const beforeRes = async (res) => {
 
         const memberCookieValue = getCookie("member")
 
-        const result = await  refreshJWT(memberCookieValue.accessToken, memberCookieValue.refreshToken)
+        const result = await refreshJWT(memberCookieValue.accessToken, memberCookieValue.refreshToken)
 
         // 새로운 accessToken, refreshToken
         memberCookieValue.accessToken = result.accessToken
@@ -75,7 +75,6 @@ const beforeRes = async (res) => {
 const requestFail = (err) => {
 
     console.log("request error..............")
-
 
 
     return Promise.reject(err)

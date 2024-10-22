@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {useDispatch} from "react-redux";
 import {login, loginPostAsync} from "../../slices/loginSlice";
 import useCustomLogin from "../../hooks/useCustomLogin";
+import KakaoLoginComponent from "./KakaoLoginComponent";
 
 const initState = {
     email:'',
@@ -64,6 +65,7 @@ function LoginComponent(props) {
                     </div>
                 </div>
             </div>
+            <KakaoLoginComponent />
         </div>
 
 );
