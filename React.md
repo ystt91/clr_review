@@ -30,3 +30,5 @@
     }
 
 # React의 큰 특징 : 데이터가 변경되면 렌더링 된다는 것을 주의하세요
+
+# redux toolkit createThunkAsync 전역 상태 관리 : 데이터 베이스와의 동기화 
