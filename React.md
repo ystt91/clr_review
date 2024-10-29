@@ -8,7 +8,9 @@
 
 # 함수 호출 : 함수가 즉시 실행됩니다.
 #           렌더링 시 즉시 실행 됩니다.
+#           그니까 뭐라할까요 함수가 실행된 값이 dom에 올라 갑니다.
 
+# Reconciliation과 diffing
 
 # Page = routing 처리 + 컴포넌트 조합
 # Component = 일처리할 부분 부분

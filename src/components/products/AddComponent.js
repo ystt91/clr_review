@@ -3,6 +3,7 @@ import {postAdd} from "../../api/productsApi";
 import FetchingModal from "../../common/FetchingModal";
 import ResultModal from "../../common/ResultModal";
 import useCustomMove from "../../hooks/useCustomMove";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
 
 const initState = {
     pname:'',
@@ -20,10 +21,12 @@ function AddComponent(props) {
     // REACT에서 DOM ELEMENT를 식별하기 위해 쓰는 것이 useRef
     const uploadRef = useRef()
 
-    const [fetching, setFetching] = useState(false);
-    const [result, setResult] = useState(false);
+    //const [fetching, setFetching] = useState(false);
+    //const [result, setResult] = useState(false);
 
     const {moveToList} = useCustomMove()
+
+    const addMutation = useMutation({mutationFn: (product) => postAdd(product)})
 
     // multipart/form-data Formdata()
     const handleChangeProduct = (e) => {
@@ -54,18 +57,22 @@ function AddComponent(props) {
 
         console.log(formData)
 
-        setFetching(true)
+        //setFetching(true)
 
+        addMutation.mutate(formData)
 
-        postAdd(formData).then(data => {
+/*        postAdd(formData).then(data => {
             setFetching(false)
             setResult(data.result)
-        })
+        })*/
 
     }
 
+    const queryClient = useQueryClient()
+
     const closeModal = () => {
-        setResult(null)
+        //setResult(null)
+        queryClient.invalidateQueries('products/list')
         moveToList({page:1})
     }
 
@@ -117,12 +124,12 @@ function AddComponent(props) {
                         </button>
                     </div>
                 </div>
-                {fetching ? <FetchingModal /> : <></>}
-                {result ?
+                {addMutation.isPending ? <FetchingModal /> : <></>}
+                {addMutation.isSuccess ?
                     <ResultModal
                         callbackFn={closeModal}
                         title={'Product Add Result'}
-                        content={`${result}번 상품 등록 완료`}
+                        content={`${addMutation.data.result}번 상품 등록 완료`}
                     ></ResultModal> : <></>}
             </div>
         );

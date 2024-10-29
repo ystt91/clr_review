@@ -3,6 +3,9 @@ import {API_SERVER_HOST} from "../../api/todoApi";
 import {getOne} from "../../api/productsApi";
 import FetchingModal from "../../common/FetchingModal";
 import useCustomMove from "../../hooks/useCustomMove";
+import useCustomCart from "../../hooks/useCustomCart";
+import useCustomLogin from "../../hooks/useCustomLogin";
+import {useQuery} from "@tanstack/react-query";
 
 
 const initState = {
@@ -17,12 +20,27 @@ const host = API_SERVER_HOST
 
 function ReadComponent({pno}) {
 
-    const [product, setProduct] = useState(initState)
-    const [fetching, setFetching] = useState(false)
+    //const [product, setProduct] = useState(initState)
+    //const [fetching, setFetching] = useState(false)
 
     const {moveToList, moveToModify,page,size} = useCustomMove()
 
-    useEffect(() => {
+    //현재 사용자의 장바구니 아이템들
+    const {cartItems, changeCart} = useCustomCart()
+
+    const {loginState} = useCustomLogin()
+
+    // v5에서는 파라미터가 객체로 처리
+    // v까지는 , 처리
+    // isFetching의 효과로 아래 코드가 필요 없어진다.
+    // const [fetching, setFetching] = useState(false)
+    const {data, isFetching} = useQuery({
+        queryKey: ['products', pno],
+        queryFn: () => getOne(pno),
+        staleTime : 1000 * 10
+    })
+
+/*    useEffect(() => {
 
         setFetching(true)
 
@@ -31,11 +49,31 @@ function ReadComponent({pno}) {
             setFetching(false)
             setProduct(data)
         })
-    }, [pno]);
+
+    }, [pno]);*/
+
+    const handleClickAddCart = () => {
+        let qty = 1
+
+        const addedItem = cartItems.filter(item => item.pno === parseInt(pno))[0]
+
+        if(addedItem){
+            if(window.confirm('이미 추가된 상품이거든요. 추가할래요?') === false){
+                return
+            }
+            qty = addedItem.qty + 1
+        }
+
+        changeCart({email:loginState.email, qty:qty, pno:pno})
+    }
+
+    //react query의 힘으로 아래 코드가 필요 없어진다.
+    //const [product, setProduct] = useState(initState)
+    const product = data || initState
 
     return (
         <div className="border-2 border-sky-200 mt-10 m-2 p-4">
-            {fetching ? <FetchingModal/> : <></>}
+            {isFetching ? <FetchingModal/> : <></>}
             <div className="flex justify-center mt-10">
                 <div className="relative mb-4 flex w-full flex-wrap items-stretch">
                     <div className="w-1/5 p-6 text-right font-bold">PNO</div>
@@ -67,6 +105,12 @@ function ReadComponent({pno}) {
             </div>
             <div className="flex justify-end p-4">
                 <button type="button"
+                        className="inline-block rounded p-4 m-2 text-xl w-32 text-white bg-green-500"
+                        onClick={handleClickAddCart}
+                >
+                    Add Cart
+                </button>
+                <button type="button"
                         className="inline-block rounded p-4 m-2 text-xl w-32 text-white bg-red-500"
                         onClick={() => moveToModify(pno)}
                 >
@@ -74,13 +118,13 @@ function ReadComponent({pno}) {
                 </button>
                 <button type="button"
                         className="rounded p-4 m-2 text-xl w-32 text-white bg-blue-500"
-                        onClick={()=> moveToList({page,size})}>
+                        onClick={() => moveToList({page, size})}>
                     List
                 </button>
             </div>
         </div>
 
     );
-            }
+}
 
-            export default ReadComponent;
+export default ReadComponent;
